@@ -3,9 +3,9 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from settings import TOKEN
 
-# from sql.bot_connector import BotDB
+from src.sql.bot_connector import BotDB
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=TOKEN, parse_mode='HTML')
 
 # logger = logging.getLogger()
 #
@@ -23,6 +23,5 @@ class Core:
         self.bot = bot
         self.storage = storage
         self.dp = dp
-        # self.BotDB = BotDB
-        print(f'Бот запущен')
-        print()
+        self.BotDB = BotDB
+        print(f'Бот запущен\n')
