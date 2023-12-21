@@ -1,6 +1,6 @@
 from aiogram.types import Message
 
-from aiogram import Dispatcher
+from aiogram import Dispatcher, types
 
 from settings import ADMIN, LOGO
 from src.telegram.keyboard.keyboards import Admin_keyb
@@ -8,6 +8,7 @@ from src.telegram.logic._start_admin import start_admin
 from src.telegram.logic._start_group import start_group
 from src.telegram.sendler.sendler import Sendler_msg
 from src.telegram.bot_core import BotDB
+from src.telegram.bot_core import bot
 
 
 async def del_(message: Message):
@@ -39,7 +40,7 @@ async def start(message: Message):
 
     type_message = message.chat.type
 
-    if type_message == 'group':
+    if type_message == 'group' or 'supergroup':
         await start_group(message)
 
     if type_message == 'private':
@@ -47,7 +48,19 @@ async def start(message: Message):
             await start_admin(message)
 
 
+async def deleter_system_message(message: Message):
+    try:
+        await bot.delete_message(message.chat.id, message.message_id)
+
+        print(f'Удалил служебное сообщение')
+
+    except Exception as es:
+        print(f'Ошибка при удаление системного сообщения "{es}"')
+
+
 def register_user(dp: Dispatcher):
+    dp.register_message_handler(deleter_system_message, content_types=['new_chat_members', 'left_chat_member'])
+
     dp.register_message_handler(del_, text_contains='/del_')
 
-    dp.register_message_handler(start, text_contains='')
+    dp.register_message_handler(start, text_contains='', content_types=[types.ContentType.ANY])

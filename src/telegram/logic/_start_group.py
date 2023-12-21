@@ -8,13 +8,13 @@
 # ---------------------------------------------
 from aiogram.types import Message
 
-from src.telegram.sendler.sendler import Sendler_msg
+from src.telegram.logic.check_black import check_black
+from src.telegram.logic.check_link import check_link
+from src.telegram.logic.deleter_message_func import delete_message_func
 
 
 async def start_group(message: Message):
     good_status = ['creator', 'administrator']
-
-    print(f'В чате сообщение "{message.text}"')
 
     user_id = message.from_user.id
 
@@ -22,15 +22,18 @@ async def start_group(message: Message):
 
     text_msg = message.text if message.text else message.caption
 
-    name_channel = message.chat.full_name
-
     info_user = await message.bot.get_chat_member(chat_id, user_id)
 
-    is_admin = info_user['status']
+    status_user_from_group = info_user['status']
 
-    try:
-        await message.delete()
-    except Exception as es:
-        await Sendler_msg.sendler_to_admin(message, f'Не могу удалить сообщение "{text_msg}" '
-                                                    f'т.к. я не являюсь администратором в '
-                                                    f'канале "{name_channel}"', None)
+    is_black = await check_black(text_msg)
+
+    print(f'В чате сообщение "{text_msg}" is_black "{is_black}"')
+
+    if status_user_from_group not in good_status and is_black:
+        await delete_message_func(message)
+
+    is_link = await check_link(text_msg)
+
+    if status_user_from_group not in good_status and is_link:
+        await delete_message_func(message)

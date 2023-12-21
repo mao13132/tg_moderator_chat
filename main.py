@@ -34,7 +34,11 @@ async def main():
 
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except (KeyboardInterrupt, SystemExit):
-        print(f'Бот остановлен!')
+    for _try in range(3):
+
+        try:
+            asyncio.run(main())
+        except (KeyboardInterrupt, SystemExit):
+            print(f'Бот остановлен!')
+
+            continue

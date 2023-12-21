@@ -4,7 +4,6 @@ from aiogram.dispatcher import FSMContext
 from settings import LOGO
 from src.telegram.bot_core import BotDB
 from src.telegram.keyboard.keyboards import Admin_keyb
-from src.telegram.logic._start_admin import start_admin
 from src.telegram.logic.devision_msg import division_message
 from src.telegram.sendler.sendler import Sendler_msg
 from src.telegram.state.states import States

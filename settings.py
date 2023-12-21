@@ -6,7 +6,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), 'src', '.env')
 
 load_dotenv(dotenv_path)
 
-ADMIN = ['1422194909']
+ADMIN = ['1422194909', '571011360']
 
 TOKEN = os.getenv('TOKEN')
 
